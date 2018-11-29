@@ -1,0 +1,26 @@
+{
+    "FileVersion" : 3,
+ 
+    "FriendlyName" : "SplineEx",
+    "Version" : 1.0,
+    "VersionName": "1.0",
+    "EngineVersion" : "4.21.0",
+    "Description" : "SplineEx",
+    "Category" : "SplineEx Plugin",
+    "CreatedBy" : "Clime",
+    "CreatedByURL" : "N/A",
+ 
+    "Modules" :
+    [
+		{
+			"Name" : "SplineEx",
+			"Type" : "Runtime",
+			"LoadingPhase": "PreDefault"
+		},
+		{
+			"Name": "SplineExEditor",
+			"Type": "Editor",
+			"LoadingPhase":  "PostEngineInit"
+		}
+    ]
+}
