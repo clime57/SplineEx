@@ -185,6 +185,9 @@ private:
 	FSplineExComponentVisualizer* SplineVisualizer;
 	UProperty* SplineCurvesProperty;
 	TArray<TSharedPtr<FString>> SplinePointTypes;
+
+	float Distance;
+	FText GetDistance() const { return FText::FromString(FString::FromInt((int)Distance)); }
 };
 
 FSplineExPointDetails::FSplineExPointDetails()
@@ -407,6 +410,27 @@ void FSplineExPointDetails::GenerateChildContent(IDetailChildrenBuilder& Childre
 			.Text(this, &FSplineExPointDetails::GetPointType)
 		]
 	];
+
+	//@Clime
+	// Distance
+	ChildrenBuilder.AddCustomRow(LOCTEXT("Distance", "Distance"))
+		.Visibility(TAttribute<EVisibility>(this, &FSplineExPointDetails::IsEnabled))
+		.NameContent()
+		.HAlign(HAlign_Left)
+		.VAlign(VAlign_Center)
+		[
+			SNew(STextBlock)
+			.Text(LOCTEXT("Distance", "Distance"))
+			.Font(IDetailLayoutBuilder::GetDetailFont())
+		]
+	.ValueContent()
+		.MinDesiredWidth(125.0f)
+		.MaxDesiredWidth(125.0f)
+		[
+			SNew(STextBlock)
+			.Font(IDetailLayoutBuilder::GetDetailFont())
+			.Text(this, &FSplineExPointDetails::GetDistance)
+		];
 }
 
 void FSplineExPointDetails::Tick(float DeltaTime)
@@ -428,7 +452,6 @@ void FSplineExPointDetails::UpdateValues()
 	Rotation.Reset();
 	Scale.Reset();
 	PointType.Reset();
-
 	if (SplineComp)
 	{
 		for (int32 Index : SelectedKeys)
@@ -440,6 +463,7 @@ void FSplineExPointDetails::UpdateValues()
 			Rotation.Add(SplineComp->GetSplinePointsRotation().Points[Index].OutVal.Rotator());
 			Scale.Add(SplineComp->GetSplinePointsScale().Points[Index].OutVal);
 			PointType.Add(ConvertInterpCurveModeToSplinePointType(SplineComp->GetSplinePointsPosition().Points[Index].InterpMode));
+			Distance = (SplineComp->GetDistanceAlongSplineAtSplinePoint(Index));
 		}
 	}
 }
